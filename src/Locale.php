@@ -9,15 +9,23 @@
  * @link https://www.cakedc.com
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 namespace CakeDC\Intl;
 
 use UnexpectedValueException;
 
 class Locale
 {
+    static public $locale = 'en_US';
+
+    public static function setDefault($locale)
+    {
+        self::$locale = $locale;
+    }
+
     public static function getDefault()
     {
-        return 'en_US';
+        return self::$locale;
     }
 
     public static function getDisplayLanguage($locale, $in_locale = null)
@@ -31,13 +39,14 @@ class Locale
 
     public static function parseLocale($locale)
     {
-        if ($locale == null) {
+        if (!$locale || $locale === 'en_US' || $locale === 'en') {
             return ['language' => 'en', 'region' => 'US',];
         }
-        if ($locale !== 'en_US' && $locale !== 'en') {
-            throw new UnexpectedValueException("This library currently supports English, $locale was used.");
+
+        if ($locale === 'zh_CN' || $locale === 'cn') {
+            return ['language' => 'cn', 'region' => 'CN',];
         }
 
-        return ['language' => 'en', 'region' => 'US',];
+        throw new UnexpectedValueException("This library currently supports English, $locale was used.");
     }
 }
